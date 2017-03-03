@@ -1,0 +1,10 @@
+CountryName;Sea;Schengen;AverageTemperature;CurrencyRate;RentPerDay
+Thailand;True;False;30;1.8;100
+Hungary;False;True;10;0.3;500
+Germany;True;True;5;80;50
+Japan;True;False;15;0.6;250
+GreatBritain;True;False;10;79;50
+Switzerland;False;True;9;64;60
+Greece;True;True;24;4.9;90
+Guatemala;True;False;19;0.1;600
+Nepal;False;False;19;1.6;80
