@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import vk
 import json
 import time
 
-session = vk.AuthSession(app_id=APP_ID, user_login=USER_LOGIN, user_password=USER_PASSWORD)
+import vk
+import user_info as ui
+
+
+session = vk.AuthSession(app_id=ui.APP_ID, user_login=ui.USER_LOGIN, user_password=ui.USER_PASSWORD)
 api = vk.API(session)
 
 
@@ -61,10 +64,10 @@ def get_groups(users_list):
     for user in users_list:
         try:
             for item in api.groups.get(user_id=user, extended=1)[1:]:
-                if item['name'] not in groups.keys():
-                    groups[item['name']] = 1
-                else:
+                if item['name'] in groups.keys():
                     groups[item['name']] += 1
+                else:
+                    groups[item['name']] = 1
         # Обработка исключения, если пользователь удален или забанен
         except vk.exceptions.VkAPIError:
             print('Обработанно пользователей:', user_count)
@@ -84,14 +87,15 @@ def file_write(groups_list):
     top_groups = [{'title': i[0], 'count': i[1]} for i in groups_list[0:100]]
     print(top_groups)
     with open('top100.json', 'w') as file:
-        json.dump(top_groups, file, indent=0, ensure_ascii=False)
+        json.dump(top_groups, file, indent=2, ensure_ascii=False)
 
 
-user_id = get_user()
+if __name__ == '__main__':
+    user_id = get_user()
 
-# Вариант для друзей
-friends = api.friends.get(user_id=user_id)
-file_write(get_groups(friends))
+    # Вариант для друзей
+    friends = api.friends.get(user_id=user_id)
+    file_write(get_groups(friends))
 
-# Вариант для подписчиков (при большом количестве подписчиков работает очень долго)
-# file_write(get_groups(get_followers(user_id)))
+    # Вариант для подписчиков (при большом количестве подписчиков работает очень долго)
+    # file_write(get_groups(get_followers(user_id)))
