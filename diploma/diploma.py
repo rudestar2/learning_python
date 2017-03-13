@@ -64,10 +64,8 @@ def get_groups(users_list):
     for user in users_list:
         try:
             for item in api.groups.get(user_id=user, extended=1)[1:]:
-                if item['name'] in groups.keys():
-                    groups[item['name']] += 1
-                else:
-                    groups[item['name']] = 1
+                groups.setdefault(item['name'], 0)
+                groups[item['name']] += 1
         # Обработка исключения, если пользователь удален или забанен
         except vk.exceptions.VkAPIError:
             print('Обработанно пользователей:', user_count)
