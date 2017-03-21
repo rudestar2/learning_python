@@ -34,6 +34,7 @@ def get_followers(user):
     followers = set()
     offset = 0
     followers_count = API.users.getFollowers(user_id=user)['count']
+    time.sleep(0.34)
     with tqdm(total=followers_count, desc='Получение подписчиков',
               bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt}') as pbar:
         for i in range(followers_count):
@@ -85,7 +86,6 @@ def file_write(groups_list):
     :return:
     """
     top_groups = [{'title': i[0], 'count': i[1]} for i in groups_list[:100]]
-    print(top_groups)
     with open('top100.json', 'w') as file:
         json.dump(top_groups, file, indent=2, ensure_ascii=False)
 
@@ -94,8 +94,8 @@ if __name__ == '__main__':
     user_id = get_user()
 
     # Вариант для друзей
-    # friends = API.friends.get(user_id=user_id)
-    # file_write(get_groups(friends))
+    friends = API.friends.get(user_id=user_id)
+    file_write(get_groups(friends))
 
     # Вариант для подписчиков (при большом количестве подписчиков работает очень долго)
-    file_write(get_groups(get_followers(user_id)))
+    # file_write(get_groups(get_followers(user_id)))
